@@ -96,9 +96,10 @@ function generate_ig_list_kit_spm_public_headers() {
 
     public_headers_list=$(
         find "Source/IGListKit" -name "*.[h]" \
-            -type f -not -path "spm/*" \
-            -not -path "Source/IGListKit/Internal/*" \
-            -not -path "Examples/*" | sed "s| \([^/]\)|:\1|g"
+        \! -name "IGListBindingSingleSectionController.[hm]" \
+        -type f -not -path "spm/*" \
+        -not -path "Source/IGListKit/Internal/*" \
+        -not -path "Examples/*" | sed "s| \([^/]\)|:\1|g"
     )
 
     SRC_ROOT=$(pwd)
@@ -120,11 +121,12 @@ function generate_ig_list_kit_spm_private_headers() {
     echo "Generated under ${SPM_IG_LIST_KIT_SOURCES_PATH}"
 
     shared_ig_diff_kit_sorces_list=$(find "Source/IGListDiffKit/Internal" \
-        -name "*.hm" \
+        -name "*.[hm]" \
         -type f -not -path "spm/*" | sed "s| \([^/]\)|:\1|g")
 
     private_headers_list=$(find "Source/IGListKit/Internal" \
         -name "*.h" \
+        \! -name "IGListBindingSingleSectionController.[hm]" \
         -type f -not -path "spm/*" | sed "s| \([^/]\)|:\1|g")
 
     SRC_ROOT=$(pwd)
@@ -155,6 +157,7 @@ function generate_ig_list_kit_spm_sources() {
 
     sources_list=$(find "Source/IGListKit" \
         -name "*.m" \
+        \! -name "IGListBindingSingleSectionController.[hm]" \
         -type f -not -path "spm/*" | sed "s| \([^/]\)|:\1|g")
 
     SRC_ROOT=$(pwd)
@@ -193,7 +196,7 @@ function cleanup() {
 ########## SPM generator pipeline #############
 #1
 cleanup
-#2
-generate_ig_list_diff_kit
-#3
-generate_ig_list_kit
+# #2
+# generate_ig_list_diff_kit
+# #3
+# generate_ig_list_kit
