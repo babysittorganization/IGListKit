@@ -26,10 +26,11 @@ function generate_ig_list_diff_kit_spm_public_headers() {
     echo "Generated under ${SPM_IG_LIST_DIFF_KIT_PUBLIC_HEADERS_PATH}"
 
     public_headers_list=$(
-        find "Source/IGListDiffKit" -name "*.[h]" \
-            -type f -not -path "spm/*" \
-            -not -path "Source/IGListDiffKit/Internal/*" \
-            -not -path "Examples/*" | sed "s| \([^/]\)|:\1|g"
+        find "Source/IGListDiffKit" \
+        -type f -name "*.[h]" \
+        -not -path "spm/*" \
+        -not -path "Source/IGListDiffKit/Internal/*" \
+        -not -path "Examples/*" | sed "s| \([^/]\)|:\1|g"
     )
 
     SRC_ROOT=$(pwd)
@@ -46,12 +47,13 @@ function generate_ig_list_diff_kit_spm_public_headers() {
 }
 
 function generate_ig_list_diff_kit_spm_private_headers() {
-    echo "Generate symbolic links for all private headers/implementations *.h && *.m"
+    echo "Generate symbolic links for all private headers *.h"
     echo "Generated under ${SPM_IG_LIST_DIFF_KIT_SOURCES_PATH}"
 
-    private_headers_list=$(find "Source/IGListDiffKit/Internal" \
-        -name "*.h" \
-        -type f -not -path "spm/*" | sed "s| \([^/]\)|:\1|g")
+    private_headers_list=$(
+        find "Source/IGListDiffKit/Internal" \
+        -type f -name "*.h" \
+        -not -path "spm/*" | sed "s| \([^/]\)|:\1|g")
 
     SRC_ROOT=$(pwd)
     cd $SPM_IG_LIST_DIFF_KIT_SOURCES_PATH
@@ -70,12 +72,13 @@ function generate_ig_list_diff_kit_spm_private_headers() {
 }
 
 function generate_ig_list_diff_kit_spm_sources() {
-    echo "Generate symbolic links for all public implementtions. *.m"
+    echo "Generate symbolic links for all public implementtions. *.m & *.mm"
     echo "Generated under ${SPM_IG_LIST_DIFF_KIT_SOURCES_PATH}"
 
-    sources_list=$(find "Source/IGListDiffKit" \
-        -name "*.m" \
-        -type f -not -path "spm/*" | sed "s| \([^/]\)|:\1|g")
+    sources_list=$(
+        find "Source/IGListDiffKit" \
+        -type f -name "*.[m]" -o -name "*.mm" \
+        -not -path "spm/*" | sed "s| \([^/]\)|:\1|g")
 
     SRC_ROOT=$(pwd)
     cd $SPM_IG_LIST_DIFF_KIT_SOURCES_PATH
@@ -110,8 +113,9 @@ function generate_ig_list_kit_spm_public_headers() {
     echo "Generated under ${SPM_IG_LIST_KIT_PUBLIC_HEADERS_PATH}"
 
     public_headers_list=$(
-        find "Source/IGListKit" -name "*.[h]" \
+        find "Source/IGListKit" \
         \! -name "IGListBindingSingleSectionController.[hm]" \
+        -name "*.[h]" \
         -type f -not -path "spm/*" \
         -not -path "Source/IGListKit/Internal/*" \
         -not -path "Examples/*" | sed "s| \([^/]\)|:\1|g"
@@ -136,13 +140,14 @@ function generate_ig_list_kit_spm_private_headers() {
     echo "Generated under ${SPM_IG_LIST_KIT_SOURCES_PATH}"
 
     shared_ig_diff_kit_sorces_list=$(find "Source/IGListDiffKit/Internal" \
-        -name "*.[hm]" \
-        -type f -not -path "spm/*" | sed "s| \([^/]\)|:\1|g")
+        -name "*.[hm]" -o -name "*.mm" \
+        -type f -not -path "spm/*" \
+        -not -path "Examples/*" | sed "s| \([^/]\)|:\1|g")
 
     private_headers_list=$(find "Source/IGListKit/Internal" \
         -name "*.h" \
-        \! -name "IGListBindingSingleSectionController.[hm]" \
-        -type f -not -path "spm/*" | sed "s| \([^/]\)|:\1|g")
+        -type f -not -path "spm/*" \
+        -not -path "Examples/*" | sed "s| \([^/]\)|:\1|g")
 
     SRC_ROOT=$(pwd)
     cd $SPM_IG_LIST_KIT_SOURCES_PATH
@@ -170,10 +175,12 @@ function generate_ig_list_kit_spm_sources() {
     echo "Generate symbolic links for all public implementtions. *.m"
     echo "Generated under ${SPM_IG_LIST_KIT_SOURCES_PATH}"
 
-    sources_list=$(find "Source/IGListKit" \
-        -name "*.m" \
+    sources_list=$(
+        find "Source/IGListKit" \
         \! -name "IGListBindingSingleSectionController.[hm]" \
-        -type f -not -path "spm/*" | sed "s| \([^/]\)|:\1|g")
+        -name "*.m" -o -name "*.mm"
+        -type f -not -path "spm/*" \
+        -not -path "Examples/*" | sed "s| \([^/]\)|:\1|g")
 
     SRC_ROOT=$(pwd)
     cd $SPM_IG_LIST_KIT_SOURCES_PATH
@@ -201,11 +208,11 @@ function generate_ig_list_kit() {
 
 # Delete all symbolik links from `spm` folder
 function cleanup() {
-    rm -rf $SPM_IG_LIST_DIFF_KIT_PUBLIC_HEADERS_PATH/*.[hm]
-    rm -rf $SPM_IG_LIST_DIFF_KIT_SOURCES_PATH/*.[hm]
+    rm -rf $SPM_IG_LIST_DIFF_KIT_PUBLIC_HEADERS_PATH/*.*
+    rm -rf $SPM_IG_LIST_DIFF_KIT_SOURCES_PATH/*.*
     #IGListKit
-    rm -rf $SPM_IG_LIST_KIT_PUBLIC_HEADERS_PATH/*.[hm]
-    rm -rf $SPM_IG_LIST_KIT_SOURCES_PATH/*.[hm]
+    rm -rf $SPM_IG_LIST_KIT_PUBLIC_HEADERS_PATH/*.*
+    rm -rf $SPM_IG_LIST_KIT_SOURCES_PATH/*.*
 }
 
 ########## SPM generator pipeline #############
@@ -213,5 +220,5 @@ function cleanup() {
 cleanup
 #2
 generate_ig_list_diff_kit
-#3
+# #3
 generate_ig_list_kit
