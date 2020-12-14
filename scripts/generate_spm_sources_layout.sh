@@ -196,7 +196,7 @@ function cleanup() {
 ########## SPM generator pipeline #############
 #1
 cleanup
-# #2
-# generate_ig_list_diff_kit
-# #3
-# generate_ig_list_kit
+#2
+generate_ig_list_diff_kit
+#3
+generate_ig_list_kit
