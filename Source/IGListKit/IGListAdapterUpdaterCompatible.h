@@ -7,9 +7,14 @@
 
 #import <Foundation/Foundation.h>
 
-#import <IGListKit/IGListUpdatingDelegate.h>
+#if !__has_include(<IGListDiffKit/IGListDiffKit.h>)
+#import "IGListExperiments.h"
+#else
 #import <IGListDiffKit/IGListExperiments.h>
-#import <IGListKit/IGListAdapterUpdaterDelegate.h>
+#endif
+
+#import "IGListUpdatingDelegate.h"
+#import "IGListAdapterUpdaterDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
